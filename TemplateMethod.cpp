@@ -54,12 +54,17 @@ public:
 public:
     void JN_Burn()
     {
+        if (canUseJN() == false) {
+            std::cout << "剩余值不足，无法释放技能" << std::endl;
+            return;
+        }
         effect_enemy();
         effect_self();
         play_effect();
     }
 
 private:
+    virtual bool canUseJN() = 0;
     virtual void effect_enemy() {};
     virtual void effect_self() {};
     void play_effect()
@@ -77,6 +82,10 @@ public:
     ~F_Warrior() { }
 
 public:
+    virtual bool canUseJN()
+    {
+        return m_life < 300 ? false : true;
+    }
     virtual void effect_enemy()
     {
         std::cout << "让所有的敌人失去500生命值" << std::endl;
@@ -97,6 +106,10 @@ public:
     ~F_Mage() { }
 
 public:
+    virtual bool canUseJN()
+    {
+        return m_magic < 100 ? false : true;
+    }
     virtual void effect_enemy()
     {
         std::cout << "让所有的敌人失去650生命值" << std::endl;
@@ -110,10 +123,13 @@ public:
 
 int main()
 {
-    Fighter* prole_war = new F_Warrior(1000, 0, 200);
+    Fighter* prole_war = new F_Warrior(500, 0, 200);
+    prole_war->JN_Burn();
     prole_war->JN_Burn();
     std::cout << "******************************************" << std::endl;
     Fighter* prole_mag = new F_Mage(800, 200, 300);
+    prole_mag->JN_Burn();
+    prole_mag->JN_Burn();
     prole_mag->JN_Burn();
     delete prole_mag;
     delete prole_war;

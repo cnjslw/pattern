@@ -4,6 +4,9 @@
 /*******************************************************
 游戏设计V2：如果怪物种类不断增加，每次创建怪物需要知道怪物的名字还要知道怪物的类的构造函数，创建工厂类，屏蔽掉这些这些细节
 *******************************************************/
+/*******************************************************
+游戏设计V3：静态工厂类
+*******************************************************/
 #include <iostream>
 #include <string>
 class Monster {
@@ -60,15 +63,15 @@ public:
 
 class MonsterFactory {
 public:
-    Monster* createMonster(std::string strmontype)
+    static Monster* createMonster(std::string strmontype)
     {
         Monster* ptrnobj = nullptr;
         if (strmontype == "uud") {
             ptrnobj = new M_Undead(300, 50, 80);
         } else if (strmontype == "elm") {
-            ptrnobj = new M_Undead(200, 40, 90);
+            ptrnobj = new M_Element(200, 40, 90);
         } else if (strmontype == "mec") {
-            ptrnobj = new M_Undead(500, 10, 20);
+            ptrnobj = new M_Mechanic(500, 10, 20);
         }
         return ptrnobj;
     }
@@ -90,10 +93,18 @@ int main()
     // delete pM3;
 
     // v2
-    MonsterFactory facobj;
-    Monster* pM1 = facobj.createMonster("uud");
-    Monster* pM2 = facobj.createMonster("elm");
-    Monster* pM3 = facobj.createMonster("mec");
+    // MonsterFactory facobj;
+    // Monster* pM1 = facobj.createMonster("uud");
+    // Monster* pM2 = facobj.createMonster("elm");
+    // Monster* pM3 = facobj.createMonster("mec");
+    // delete pM1;
+    // delete pM2;
+    // delete pM3;
+
+    // V3
+    Monster* pM1 = MonsterFactory::createMonster("uud");
+    Monster* pM2 = MonsterFactory::createMonster("elm");
+    Monster* pM3 = MonsterFactory::createMonster("mec");
     delete pM1;
     delete pM2;
     delete pM3;

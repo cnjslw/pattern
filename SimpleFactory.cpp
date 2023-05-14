@@ -1,7 +1,11 @@
 /*******************************************************
 游戏设计V1：设计怪物，亡灵类怪物，元素类怪物，机械类怪物
 *******************************************************/
+/*******************************************************
+游戏设计V2：如果怪物种类不断增加，每次创建怪物需要知道怪物的名字还要知道怪物的类的构造函数，创建工厂类，屏蔽掉这些这些细节
+*******************************************************/
 #include <iostream>
+#include <string>
 class Monster {
 protected:
     int m_life;
@@ -54,12 +58,42 @@ public:
     ~M_Mechanic() { }
 };
 
+class MonsterFactory {
+public:
+    Monster* createMonster(std::string strmontype)
+    {
+        Monster* ptrnobj = nullptr;
+        if (strmontype == "uud") {
+            ptrnobj = new M_Undead(300, 50, 80);
+        } else if (strmontype == "elm") {
+            ptrnobj = new M_Undead(200, 40, 90);
+        } else if (strmontype == "mec") {
+            ptrnobj = new M_Undead(500, 10, 20);
+        }
+        return ptrnobj;
+    }
+
+public:
+    MonsterFactory(/* args */) { }
+    ~MonsterFactory() { }
+};
+
 int main()
 {
-    M_Undead* pM1 = new M_Undead(300, 50, 80);
-    M_Element* pM2 = new M_Element(200, 40, 90);
-    M_Mechanic* pM3 = new M_Mechanic(500, 10, 20);
+    // V1
+    //  M_Undead* pM1 = new M_Undead(300, 50, 80);
+    //  M_Element* pM2 = new M_Element(200, 40, 90);
+    //  M_Mechanic* pM3 = new M_Mechanic(500, 10, 20);
 
+    // delete pM1;
+    // delete pM2;
+    // delete pM3;
+
+    // v2
+    MonsterFactory facobj;
+    Monster* pM1 = facobj.createMonster("uud");
+    Monster* pM2 = facobj.createMonster("elm");
+    Monster* pM3 = facobj.createMonster("mec");
     delete pM1;
     delete pM2;
     delete pM3;

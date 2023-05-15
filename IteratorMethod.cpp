@@ -90,12 +90,19 @@ public:
 
 int main()
 {
+    // myCotainer<int>* pcontainer = new myVector<int>();
+    // myIter<int>* iter = pcontainer->CreateIterator();
+    // for (iter->First(); !iter->isDone(); iter->Next()) {
+    //     std::cout << iter->CurrentItem() << " ";
+    // }
+    // std::cout << std::endl;
+    // delete iter;
+    // delete pcontainer;
     myCotainer<int>* pcontainer = new myVector<int>();
-    myIter<int>* iter = pcontainer->CreateIterator();
-    for (iter->First(); !iter->isDone(); iter->Next()) {
-        std::cout << iter->CurrentItem() << " ";
+    myVectorIter<int> iter(pcontainer);
+    for (iter.First(); !iter.isDone(); iter.Next()) {
+        std::cout << iter.CurrentItem() << " ";
     }
-    std::cout << std::endl;
-    delete iter;
     delete pcontainer;
+    return 0;
 }

@@ -79,6 +79,34 @@
 /*******************************************************
 游戏设计V3：饿汉模式与懒汉模式（V1）保证在多线程中的安全
 *******************************************************/
+// class GameConfig {
+// private:
+//     GameConfig() { }
+//     ~GameConfig() { }
+//     GameConfig(const GameConfig&) { }
+//     GameConfig& operator=(const GameConfig& tmpobj) { }
+
+// public:
+//     static GameConfig* getInstance()
+//     {
+//         return m_instance;
+//     }
+
+// private:
+//     static GameConfig* m_instance;
+// };
+
+// GameConfig* GameConfig::m_instance = new GameConfig();
+
+// int main()
+// {
+//     GameConfig* g_gc = GameConfig::getInstance();
+//     return 0;
+// }
+
+/*******************************************************
+游戏设计V4：类对象的内存回收问题
+*******************************************************/
 class GameConfig {
 private:
     GameConfig() { }
@@ -87,19 +115,57 @@ private:
     GameConfig& operator=(const GameConfig& tmpobj) { }
 
 public:
+    // 饿汉模式下的自动析构
     static GameConfig* getInstance()
     {
         return m_instance;
     }
 
+    /*手动析构*/
+    // static void freeInstance()
+    // {
+    //     if (m_instance != nullptr) {
+    //         delete m_instance;
+    //         GameConfig::m_instance = nullptr;
+    //     }
+    // }
+    // 懒汉模式下的自动析构
+    // static GameConfig* getInstance()
+    // {
+    //     if (m_instance == nullptr) {
+    //         m_instance = new GameConfig();
+    //         static Garbo agrboobj;
+    //     }
+    //     return m_instance;
+    // }
+
 private:
+    class Garbo {
+    public:
+        ~Garbo()
+        {
+            if (GameConfig::m_instance != nullptr) {
+                delete GameConfig::m_instance;
+                GameConfig::m_instance = nullptr;
+            }
+        }
+    };
+
     static GameConfig* m_instance;
+    static Garbo agrboobj;
 };
 
 GameConfig* GameConfig::m_instance = new GameConfig();
+GameConfig::Garbo GameConfig::agrboobj;
 
 int main()
 {
     GameConfig* g_gc = GameConfig::getInstance();
+    // 手动析构
+    // GameConfig::freeInstance();
+
+    // 懒汉模式下的自动析构
+    g_gc = nullptr;
+
     return 0;
 }

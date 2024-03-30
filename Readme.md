@@ -86,6 +86,8 @@
 #### 自动析构
 见代码V4，略
 
+[线程安全的单例模式模板](./Singleton/paradigm.cpp)
+
 <br>
 
 <br><br><br>
